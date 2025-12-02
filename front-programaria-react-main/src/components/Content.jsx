@@ -10,9 +10,11 @@ import styles from '../styles/content.module.css'
 export function Content() {
   const [repositories, setRepositories] = useState([])
   const [nome, setNome] = useState('')
-  const [profissao, setProfissao] = useState('')
+  const [minibio, setminibio] = useState('')
+  const [citacao, setCitacao] = useState('')
+  const [imagem, setImagem] = useState('')
   const [success, setSuccess] = useState(false)
-  const baseURL = 'https://projeto-api-etc1.onrender.com/mulheres'
+  const baseURL = 'https://back-end-6c7c.onrender.com/mulheres'
 
   useEffect(() => {
     async function getData() {
@@ -25,22 +27,30 @@ export function Content() {
   function handleInputValueNome(event) {
     setNome(event.target.value)
   }
- 
 
-  function handleInputValueProfissao(event) {
-    setProfissao(event.target.value)
+  function handleInputValueminibio(event) {
+    setminibio(event.target.value)
   }
 
- 
+  function handleInputValueImagem(event) {
+    setImagem(event.target.value)
+  }
+
+  function handleInputValueCitacao(event) {
+    setCitacao(event.target.value)
+  }
+
   function handleCreateMessage(event) {
     event.preventDefault()
 
-    console.log('mensagem enviada', nome, profissao)
+    console.log('mensagem enviada', nome, citacao, minibio, imagem)
 
     async function sendData() {
       await Axios.post(baseURL, {
         nome: nome,
-        imagem: profissao
+        citacao: citacao,
+        minibio: minibio,
+        imagem: imagem
       })
       const response = await Axios.get(baseURL)
       setRepositories(response.data)
@@ -49,8 +59,9 @@ export function Content() {
 
     setSuccess(true)
     setNome('')
-    setProfissao('')
-    
+    setminibio('')
+    setImagem('')
+    setCitacao('')
   }
 
   return (
@@ -66,15 +77,15 @@ export function Content() {
             {repositories.map((repo) => {
               return(
                 <div key={repo._id} className={styles.cardRepo}>
-                
+                <div className={styles.cardImgContainer}>
+                  <img className={styles.cardRepoImage} src={repo.imagem} />
+                </div>
                 <details>
                   <summary className={styles.cardRepoSummary}>
                     {repo.nome}
                   </summary>
-                  <summary className={styles.cardRepoSummary}>
-                    {repo.profissao}
-                  </summary>
-                  
+                  <p className={styles.cardRepoText}>{repo.minibio}</p>
+                  <q className={styles.cardRepoQuote}>{repo.citacao}</q>
                 </details>
               </div>
               )
@@ -92,12 +103,23 @@ export function Content() {
             className={styles.formInput}
           />
           <textarea 
-            onChange={handleInputValueProfissao} 
-            placeholder="Digite a profissão"
-            value={profissao}
-            className={styles.formInput}
+            onChange={handleInputValueImagem} 
+            placeholder="Digite o link da imagem"
+            value={imagem}
+            className={styles.formTextArea}
           />
-          
+          <textarea 
+            onChange={handleInputValueminibio} 
+            placeholder="Digite a minibiografia"
+            value={minibio}
+            className={styles.formTextArea}
+          />
+          <textarea 
+            onChange={handleInputValueCitacao} 
+            placeholder="Digite a citação"
+            value={citacao}
+            className={styles.formTextArea}
+          />
           <button className={styles.formButton} type="submit">Enviar mensagem</button>
           {success && <p>Cadastro realizado com sucesso.</p>}
         </form>
