@@ -10,9 +10,7 @@ import styles from '../styles/content.module.css'
 export function Content() {
   const [repositories, setRepositories] = useState([])
   const [nome, setNome] = useState('')
-  const [minibio, setminibio] = useState('')
-  const [citacao, setCitacao] = useState('')
-  const [imagem, setImagem] = useState('')
+  const [profissao, setProfissao] = useState('')
   const [success, setSuccess] = useState(false)
   const baseURL = 'https://projeto-api-etc1.onrender.com/mulheres'
 
@@ -28,29 +26,20 @@ export function Content() {
     setNome(event.target.value)
   }
 
-  function handleInputValueminibio(event) {
-    setminibio(event.target.value)
+  function handleInputValueProfissao(event) {
+    setProfissao(event.target.value)
   }
 
-  function handleInputValueImagem(event) {
-    setImagem(event.target.value)
-  }
-
-  function handleInputValueCitacao(event) {
-    setCitacao(event.target.value)
-  }
-
+  
   function handleCreateMessage(event) {
     event.preventDefault()
 
-    console.log('mensagem enviada', nome, citacao, minibio, imagem)
+    console.log('mensagem enviada', nome, profissao)
 
     async function sendData() {
       await Axios.post(baseURL, {
-        nome: nome,
-        citacao: citacao,
-        minibio: minibio,
-        imagem: imagem
+        nome: nome,        
+        profissao: profissao,
       })
       const response = await Axios.get(baseURL)
       setRepositories(response.data)
@@ -59,9 +48,7 @@ export function Content() {
 
     setSuccess(true)
     setNome('')
-    setminibio('')
-    setImagem('')
-    setCitacao('')
+    setProfissao('')
   }
 
   return (
@@ -84,8 +71,8 @@ export function Content() {
                   <summary className={styles.cardRepoSummary}>
                     {repo.nome}
                   </summary>
-                  <p className={styles.cardRepoText}>{repo.minibio}</p>
-                  <q className={styles.cardRepoQuote}>{repo.citacao}</q>
+                  <p className={styles.cardRepoText}>{repo.profissao}</p>
+                  
                 </details>
               </div>
               )
@@ -103,23 +90,12 @@ export function Content() {
             className={styles.formInput}
           />
           <textarea 
-            onChange={handleInputValueImagem} 
-            placeholder="Digite o link da imagem"
+            onChange={handleInputValueProfissao} 
+            placeholder="Digite a Profissão"
             value={imagem}
-            className={styles.formTextArea}
+            className={styles.formInput}
           />
-          <textarea 
-            onChange={handleInputValueminibio} 
-            placeholder="Digite a minibiografia"
-            value={minibio}
-            className={styles.formTextArea}
-          />
-          <textarea 
-            onChange={handleInputValueCitacao} 
-            placeholder="Digite a citação"
-            value={citacao}
-            className={styles.formTextArea}
-          />
+          
           <button className={styles.formButton} type="submit">Enviar mensagem</button>
           {success && <p>Cadastro realizado com sucesso.</p>}
         </form>
